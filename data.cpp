@@ -99,10 +99,10 @@ int main () {
 
            for (int i=0; i<1000000; ++i) {
       	      if (0 != bidCount[i])  {
-                 fprintf(bidFile, "%.2f, %d, \n", (float)i/100, bidCount[i]);
+                 fprintf(bidFile, "Time: %d, Price: %.2f, Count:  %d, \n", timePrev, (float)i/100, bidCount[i]);
       	      }
       	      if (0 != ofrCount[i])  {
-                 fprintf(ofrFile, "%.2f, %d, \n", (float)i/100, ofrCount[i]);
+                 fprintf(ofrFile, "Time: %d, Price: %.2f, Count:  %d, \n", timePrev, (float)i/100, ofrCount[i]);
       	      }
    	   }
 
