@@ -1,9 +1,9 @@
 
-fid1 = fopen('bidHist.csv');
-bid = textscan(fid1, '%f; %d;');
+fid1 = fopen('IBMbidHist.csv');
+bid = textscan(fid1, 'Time: %d, Price: %.2f, Count: %d, ');
 
-fid2 = fopen('ofrHist.csv');
-ofr = textscan(fid2, '%f; %d;');
+fid2 = fopen('IBMofrHist.csv');
+ofr = textscan(fid2, 'Time: %d, Price: %.2f, Count: %d, ');
 
 % bidIdx : Index of higest freq element
 [maxBidFreq, bidIdx] = max(bid{2}); % Find max freq
