@@ -92,10 +92,9 @@ int main () {
 
 	if (timeCurr != timePrev || feof(inFile) ) { // timeCurr is incremented 
 
-           fprintf(bidFile, "Time Stamp is %d \n", timePrev);
-           fprintf(ofrFile, "Time Stamp is %d \n", timePrev);
+           //fprintf(bidFile, "Time Stamp is %d \n", timePrev);
+           //fprintf(ofrFile, "Time Stamp is %d \n", timePrev);
 
-	   timePrev = timeCurr;
 
            for (int i=0; i<1000000; ++i) {
       	      if (0 != bidCount[i])  {
@@ -105,6 +104,8 @@ int main () {
                  fprintf(ofrFile, "Time: %d, Price: %.2f, Count:  %d, \n", timePrev, (float)i/100, ofrCount[i]);
       	      }
    	   }
+
+	   timePrev = timeCurr;
 
 	   // Reset all the bins
    	   memset(bidCount, 0, 1000000*sizeof(int));
