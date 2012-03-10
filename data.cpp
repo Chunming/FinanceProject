@@ -9,15 +9,15 @@ using namespace std;
 
 int main () {
    FILE *inFile;
-   inFile = fopen("AAPL", "r"); // Open file for read
+   inFile = fopen("IBMlv2.txt", "r"); // Open file for read
    if (NULL == inFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
-   bidFile = fopen("bidHist.csv", "w"); // Open file for write
+   bidFile = fopen("IBMbidHist.csv", "w"); // Open file for write
    if (NULL == bidFile) printf("ERROR opening file \n");
 
    FILE *ofrFile;
-   ofrFile = fopen("ofrHist.csv", "w"); // Open file for write
+   ofrFile = fopen("IBMofrHist.csv", "w"); // Open file for write
    if (NULL == ofrFile) printf("ERROR opening file \n");
 
    // Allocate memory for labels
@@ -63,7 +63,7 @@ int main () {
          // for (int i=0; i<10; ++i) printf("The label is %s \n", label[i]);
 
          fscanf(inFile, "%s %d %s %f %f %d %d %d %c", symbol, &date, time, &bid, &ofr, &bidSize, &ofrSize, &mode, &ex);
-         printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
+         //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
 
 
 	int hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
@@ -75,7 +75,7 @@ int main () {
            timePrev = 10000*hr + 100*min + sec; // Current time 
 	}
 
-        printf("The number is %d \n", timeCurr);	 
+        //printf("The number is %d \n", timeCurr);	 
 
 	
 	if (timeCurr == timePrev) {
