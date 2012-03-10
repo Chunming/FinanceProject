@@ -73,6 +73,9 @@ int main () {
 	int timePrev;
 	if (idx == 0) {
            timePrev = 10000*hr + 100*min + sec; // Current time 
+           fprintf(bidFile, "Ticker is %s \n", symbol);
+           fprintf(ofrFile, "Ticker is %s \n", symbol);
+
 	}
 
         //printf("The number is %d \n", timeCurr);	 
