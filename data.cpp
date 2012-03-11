@@ -20,6 +20,11 @@ int main () {
    ofrFile = fopen("AAPLofrHist.csv", "w"); // Open file for write
    if (NULL == ofrFile) printf("ERROR opening file \n");
 
+   FILE *totalFile;
+   totalFile = fopen("AAPLtotalHist.csv", "w"); // Open file for write
+   if (NULL == totalFile) printf("ERROR opening file \n");
+
+
    // Allocate memory for labels
    char** label = new char* [10];
    for (int i=0; i<10; ++i) {
@@ -48,9 +53,15 @@ int main () {
       printf("ERROR alloc \n");
       return -1;
    }
+   int* totalCount = new int [1000000];
+   if (NULL == totalCount) {
+      printf("ERROR alloc \n");
+      return -1;
+   }
    memset(bidCount, 0, 1000000*sizeof(int));
    memset(ofrCount, 0, 1000000*sizeof(int));
-
+   memset(totalCount, 0, 1000000*sizeof(int));
+   
    int bidIdx;
    int ofrIdx;
    int idx=0;
@@ -71,30 +82,19 @@ int main () {
 	int sec = atoi(&time[5]);
         int timeCurr = 10000*hr + 100*min + sec; // Current time 
 	int timePrev;
-	if (idx == 0) {
-           timePrev = 10000*hr + 100*min + sec; // Current time 
-           //fprintf(bidFile, "Ticker is %s \n", symbol);
-           //fprintf(ofrFile, "Ticker is %s \n", symbol);
+	if (idx == 0) {timePrev = 10000*hr + 100*min + sec;}
 
-	}
-
-        //printf("The number is %d \n", timeCurr);	 
-
-	
 	if (timeCurr == timePrev) {
             bidIdx = bid*100; // The hash function
             bidCount[bidIdx]+= bidSize;
+	    totalCount[bidIdx]+= bidSize; 
+
 	    ofrIdx = ofr*100;
             ofrCount[ofrIdx]+= ofrSize;
-
-	    
+	    totalCount[ofrIdx]+= ofrSize;	     
 	}
 
 	if (timeCurr != timePrev || feof(inFile) ) { // timeCurr is incremented 
-
-           //fprintf(bidFile, "Time Stamp is %d \n", timePrev);
-           //fprintf(ofrFile, "Time Stamp is %d \n", timePrev);
-
 
            for (int i=0; i<1000000; ++i) {
       	      if (0 != bidCount[i])  {
@@ -103,6 +103,9 @@ int main () {
       	      if (0 != ofrCount[i])  {
                  fprintf(ofrFile, "Time: %d, Price: %.2f, Count:  %d, \n", timePrev, (float)i/100, ofrCount[i]);
       	      }
+      	      if (0 != totalCount[i])  {
+                 fprintf(totalFile, "Time: %d, Price: %.2f, Count:  %d, \n", timePrev, (float)i/100, totalCount[i]);
+      	      }
    	   }
 
 	   timePrev = timeCurr;
@@ -110,30 +113,20 @@ int main () {
 	   // Reset all the bins
    	   memset(bidCount, 0, 1000000*sizeof(int));
    	   memset(ofrCount, 0, 1000000*sizeof(int));
+   	   memset(totalCount, 0, 1000000*sizeof(int));
 
             bidIdx = bid*100; // The hash function
             bidCount[bidIdx]+= bidSize;
+	    totalCount[bidIdx] += bidSize;
+	
 	    ofrIdx = ofr*100;
             ofrCount[ofrIdx]+= ofrSize;
-
-
+	    totalCount[bidIdx] += ofrSize;
 	}
-
-
-
-
-
-
-
 	idx++;
    }
 
-
-
-
-
-
-
+   fclose(totalFile);
    fclose(ofrFile);
    fclose(inFile);
    fclose(bidFile);
