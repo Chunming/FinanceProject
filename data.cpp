@@ -9,15 +9,15 @@ using namespace std;
 
 int main () {
    FILE *inFile;
-   inFile = fopen("IBMlv2.txt", "r"); // Open file for read
+   inFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
    if (NULL == inFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
-   bidFile = fopen("IBMbidHist.csv", "w"); // Open file for write
+   bidFile = fopen("AAPLbidHist.csv", "w"); // Open file for write
    if (NULL == bidFile) printf("ERROR opening file \n");
 
    FILE *ofrFile;
-   ofrFile = fopen("IBMofrHist.csv", "w"); // Open file for write
+   ofrFile = fopen("AAPLofrHist.csv", "w"); // Open file for write
    if (NULL == ofrFile) printf("ERROR opening file \n");
 
    // Allocate memory for labels
@@ -73,8 +73,8 @@ int main () {
 	int timePrev;
 	if (idx == 0) {
            timePrev = 10000*hr + 100*min + sec; // Current time 
-           fprintf(bidFile, "Ticker is %s \n", symbol);
-           fprintf(ofrFile, "Ticker is %s \n", symbol);
+           //fprintf(bidFile, "Ticker is %s \n", symbol);
+           //fprintf(ofrFile, "Ticker is %s \n", symbol);
 
 	}
 
