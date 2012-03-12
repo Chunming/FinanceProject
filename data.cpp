@@ -8,9 +8,13 @@ using namespace std;
 
 
 int main () {
-   FILE *inFile;
-   inFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
-   if (NULL == inFile) printf("ERROR opening file \n");
+   FILE *quoteFile;
+   quoteFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
+   if (NULL == quoteFile) printf("ERROR opening file \n");
+
+   FILE *tradeFile;
+   tradeFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
+   if (NULL == tradeFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
    bidFile = fopen("AAPLbidHist.csv", "w"); // Open file for write
@@ -67,13 +71,13 @@ int main () {
    int idx=0;
 
 
-   fscanf(inFile, "%s %s %s %s %s %s  %s %s %s %s", label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9]);
+   fscanf(quoteFile, "%s %s %s %s %s %s  %s %s %s %s", label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9]);
 
-   while(!feof(inFile)) {
+   while(!feof(quoteFile)) {
 	 
          // for (int i=0; i<10; ++i) printf("The label is %s \n", label[i]);
 
-         fscanf(inFile, "%s %d %s %f %f %d %d %d %c", symbol, &date, time, &bid, &ofr, &bidSize, &ofrSize, &mode, &ex);
+         fscanf(quoteFile, "%s %d %s %f %f %d %d %d %c", symbol, &date, time, &bid, &ofr, &bidSize, &ofrSize, &mode, &ex);
          //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
 
 
@@ -94,7 +98,7 @@ int main () {
 	    totalCount[ofrIdx]+= ofrSize;	     
 	}
 
-	if (timeCurr != timePrev || feof(inFile) ) { // timeCurr is incremented 
+	if (timeCurr != timePrev || feof(quoteFile) ) { // timeCurr is incremented 
 
            for (int i=0; i<1000000; ++i) {
       	      if (0 != bidCount[i])  {
@@ -128,6 +132,6 @@ int main () {
 
    fclose(totalFile);
    fclose(ofrFile);
-   fclose(inFile);
+   fclose(quoteFile);
    fclose(bidFile);
 }
