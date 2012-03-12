@@ -36,7 +36,15 @@ while i < nTotal
     % Bid Data
     totalPriceVect = total{2}(iStart:iEnd);
     totalFreqVect = total{3}(iStart:iEnd);
-    totalVect = rude(double(totalFreqVect), totalPriceVect); % Run length coding
+    
+    % Find index of higest freq element
+    [maxFreq, fIdx] = max(totalFreqVect); % Find max freq
+    lBnd = 0.95*totalPriceVect(fIdx);
+    uBnd = 1.05*totalPriceVect(fIdx);
+    idxVect = find(totalPriceVect>lBnd & totalPriceVect<uBnd);
+    
+    % Find the truncated vector
+    totalVect = rude(double(totalFreqVect(idxVect)), totalPriceVect(idxVect)); % Run length coding
     
     totalTime = total{1}(iStart);
     m_total = mean(totalVect);
@@ -44,14 +52,19 @@ while i < nTotal
     y_total = skewness(totalVect);
     k_total = kurtosis(totalVect); % Centered
 
-
     totalData(iTimeStep,1) = totalTime;
     totalData(iTimeStep,2) = m_total;
     totalData(iTimeStep,3) = v_total;
     totalData(iTimeStep,4) = y_total;
     totalData(iTimeStep,5) = k_total;
     
-    fprintf(fid4,'TimeStep: %d, m: %.2f, v: %.2f, y: %.2f, k: %.2f \n',...
+    
+    
+    
+    
+    
+    
+    fprintf(fid4,'%d, %.2f, %.2f, %.2f, %.2f \n',...
         totalTime, m_total, v_total, y_total, k_total);
     
     iStart = iEnd + 1;
@@ -108,7 +121,6 @@ end
 % bidIdx : Index of higest freq element
 % [maxBidFreq, bidIdx] = max(bid{2}); % Find max freq
 % [maxOfrFreq, ofrIdx] = max(ofr{2});
-
 
 % lBndBid = 0.95*bid{1}(bidIdx);
 % uBndBid = 1.05*bid{1}(bidIdx);
