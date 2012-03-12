@@ -143,7 +143,7 @@ int main () {
 
 
    // Allocate memory for labels
-   tLabel = new char* [9];
+   char** tLabel = new char* [9];
    for (int i=0; i<9; ++i) {
          tLabel[i] = new char [10];
          memset(tLabel[i], NULL, 10*sizeof(char));
@@ -174,11 +174,11 @@ int main () {
          //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
 
 
-	hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
-        min = atoi(&time[2]); // 
-	sec = atoi(&time[5]);
-        timeCurr = 10000*hr + 100*min + sec; // Current time 
-	timePrev;
+	int hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
+        int min = atoi(&time[2]); // 
+	int sec = atoi(&time[5]);
+        int timeCurr = 10000*hr + 100*min + sec; // Current time 
+	int timePrev;
 	if (idx == 0) {timePrev = 10000*hr + 100*min + sec;}
 
 	if (timeCurr == timePrev) {
