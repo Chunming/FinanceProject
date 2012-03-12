@@ -8,12 +8,12 @@ using namespace std;
 
 
 int main () {
-   FILE *quoteFile;
-   quoteFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
-   if (NULL == quoteFile) printf("ERROR opening file \n");
+//   FILE *quoteFile;
+//   quoteFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
+//   if (NULL == quoteFile) printf("ERROR opening file \n");
 
    FILE *tradeFile;
-   tradeFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
+   tradeFile = fopen("aapltradestraining.txt", "r"); // Open file for read
    if (NULL == tradeFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
@@ -45,16 +45,20 @@ int main () {
          memset(label[i], NULL, 10*sizeof(char));
    }
 
+
+
    // Allocate memory for time
    char symbol[5];
    int date;
-   char time[8];
+   char time[10];
    float bid;
    float ofr;
    int bidSize;
    int ofrSize;
    int mode;
    char ex;
+   unsigned int idx = 0;
+/*
   
    int* bidCount = new int [1000000];
    if (NULL == bidCount) {
@@ -77,7 +81,6 @@ int main () {
    
    int bidIdx;
    int ofrIdx;
-   int idx=0;
 
 
    fscanf(quoteFile, "%s %s %s %s %s %s  %s %s %s %s", label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9]);
@@ -139,7 +142,7 @@ int main () {
 	idx++;
    }
 
-
+*/
 
 
    // Allocate memory for labels
@@ -156,7 +159,7 @@ int main () {
    float price;
    int g127;
    int corr;
-   char* cond;
+   char cond[3];
    int size;
    // char ex
    // int date
@@ -167,31 +170,46 @@ int main () {
    float avePrice;
    fscanf(tradeFile, "%s %s %s %s %s %s  %s %s %s", tLabel[0], tLabel[1], tLabel[2], tLabel[3], tLabel[4], tLabel[5], tLabel[6], tLabel[7], tLabel[8]);
 
+   //printf("%s %s \n", tLabel[0], tLabel[1]);
+
    idx = 0;
    while(!feof(tradeFile)) {
-
          fscanf(tradeFile, "%s %d %s %f %d %d %s %c  %d", symbol, &date, time, &price, &g127, &corr, cond, &ex, &size);
+
          //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
 
+	int hr, min, sec, timeCurr, timePrev; // Time length can be 7 or 8
+	if (strlen(time)==7) {
+	   hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
+           min = atoi(&time[2]); // 
+	   sec = atoi(&time[5]);
+           timeCurr = 10000*hr + 100*min + sec; // Current time 
+	   timePrev;
+	}
+	else { // strlen == 8
+	   hr = atoi(&time[0]);
+           min = atoi(&time[3]); 
+	   sec = atoi(&time[6]);
+           timeCurr = 10000*hr + 100*min + sec;
+	   timePrev;
+        }
 
-	int hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
-        int min = atoi(&time[2]); // 
-	int sec = atoi(&time[5]);
-        int timeCurr = 10000*hr + 100*min + sec; // Current time 
-	int timePrev;
+	// Initialize timePrev
 	if (idx == 0) {timePrev = 10000*hr + 100*min + sec;}
+
 
 	if (timeCurr == timePrev) {
 	   cumSum = cumSum + price*size;
 	   cumWeight = cumWeight + size;
+	   timePrev = timeCurr;
 	}
 
-	if (timeCurr != timePrev || feof(quoteFile) ) { // timeCurr is incremented 
+	if (timeCurr != timePrev || feof(tradeFile)) { // timeCurr is incremented 
 
 	   avePrice = cumSum/cumWeight;
-           for (int i=0; i<1000000; ++i) {
-                 fprintf(priceFile, "Time: %d, Price: %.2f, \n", timePrev, avePrice);
-   	   }
+           fprintf(priceFile, "Time: %d, Price: %.2f, \n", timePrev, avePrice);
+
+           //printf("Time: %d, Price: %.2f, \n", timePrev, avePrice);
 
 	   timePrev = timeCurr;
 
@@ -202,7 +220,9 @@ int main () {
 	   cumSum = cumSum + price*size;
 	   cumWeight = cumWeight + size;
 
+
 	}
+	
 	idx++;
    }
 
@@ -214,7 +234,7 @@ int main () {
    fclose(priceFile);
    fclose(totalFile);
    fclose(ofrFile);
-   fclose(quoteFile);
+   //fclose(quoteFile);
    fclose(tradeFile);
    fclose(bidFile);
 }
