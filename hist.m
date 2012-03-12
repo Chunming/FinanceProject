@@ -3,6 +3,9 @@ close all
 clc;
 
 
+fid0 = fopen('AAPLpriceHist.csv');
+price = textscan(fid0, 'Time: %d, Price: %.2f,');
+
 fid1 = fopen('AAPLbidHist.csv');
 %bidSym = textscan(fid1, 'Ticker is %s');
 bid = textscan(fid1, 'Time: %d, Price: %.2f, Count: %d,');
@@ -21,8 +24,21 @@ i = 1;
 iStart = 1;
 iTimeStep = 1;
 totalData = zeros(size(total{1},1), 5); % Store 4 elements per time step
-nTotal = size(total{1},1); % Bid dim
-while i < nTotal
+nTotal = size(total{1},1);
+
+k = 1;
+kStart = 1;
+kTimeStep = 1;
+bidData = zeros(size(bid{1}), 5); %
+nBid = size(bid{1},1); % bid dim
+
+j = 1;
+jStart = 1;
+jTimeStep = 1;
+ofrData = zeros(size(ofr{1}), 5); %
+nOfr = size(ofr{1},1); % Ofr dim
+
+while i < 10000 % k < nBid, j < nOfr
     
     while total{1}(iStart)==total{1}(i)
        i = i + 1;
@@ -56,23 +72,50 @@ while i < nTotal
     totalData(iTimeStep,3) = v_total;
     totalData(iTimeStep,4) = y_total;
     totalData(iTimeStep,5) = k_total;
-        
-    fprintf(fid4,'%d, %.2f, %.2f, %.2f, %.2f \n',...
-        totalTime, m_total, v_total, y_total, k_total);
     
     iStart = iEnd + 1;
     iTimeStep = iTimeStep + 1;
     
-end 
+    
+    
+    %% Bid Operation
+    
+    while bid{1}(kStart)==bid{1}(k)
+       k = k + 1;
+       if k > nBid
+           break;
+       end
+    end
+    kEnd = k - 1; % 6
 
+    % Bid Data
+    bidPriceVect = bid{2}(kStart:kEnd);
+    bidFreqVect = bid{3}(kStart:kEnd);
+    
+    % Find index of higest freq element
+    [bid_maxFreq, bid_fIdx] = max(bidFreqVect); % Find max freq
+    bidlBnd = 0.95*bidPriceVect(bid_fIdx);
+    biduBnd = 1.05*bidPriceVect(bid_fIdx);
+    bidIdxVect = find(bidPriceVect>bidlBnd & bidPriceVect<biduBnd);    
+    
+    bidVect = rude(double(bidFreqVect), bidPriceVect); % Run length coding
+    
+    bidTime = bid{1}(kStart);
+    m_bid = mean(bidVect);
+    v_bid = var(bidVect);
+    k_bid = kurtosis(bidVect); % Centered
+    y_bid = skewness(bidVect);
 
-
-j = 1;
-jStart = 1;
-jTimeStep = 1;
-ofrData = zeros(size(ofr{1}), 5); %
-nOfr = size(ofr{1},1); % Ofr dim
-while j < nOfr
+    bidData(kTimeStep,1) = bidTime;
+    bidData(kTimeStep,2) = m_bid;
+    bidData(kTimeStep,3) = v_bid;
+    bidData(kTimeStep,4) = k_bid;
+    bidData(kTimeStep,5) = y_bid;    
+    
+    kStart = kEnd + 1;
+    kTimeStep = kTimeStep + 1;
+    
+    %% Ofr Operation
     
     while ofr{1}(jStart)==ofr{1}(j)
        j = j + 1;
@@ -85,6 +128,13 @@ while j < nOfr
     % Ofr Data
     ofrPriceVect = ofr{2}(jStart:jEnd);
     ofrFreqVect = ofr{3}(jStart:jEnd);
+    
+    % Find index of higest freq element
+    [ofr_maxFreq, ofr_fIdx] = max(ofrFreqVect); % Find max freq
+    ofrlBnd = 0.95*ofrPriceVect(ofr_fIdx);
+    ofruBnd = 1.05*ofrPriceVect(ofr_fIdx);
+    ofrIdxVect = find(ofrPriceVect>ofrlBnd & ofrPriceVect<ofruBnd);    
+    
     ofrVect = rude(double(ofrFreqVect), ofrPriceVect); % Run length coding
     
     ofrTime = ofr{1}(jStart);
@@ -102,6 +152,19 @@ while j < nOfr
     jStart = jEnd + 1;
     jTimeStep = jTimeStep + 1;
     
+    % (Lowest Ask + Highest Bid) /2
+    mPrice = (min(ofrPriceVect) + max(bidPriceVect))/2; 
+    
+    
+    figure
+    plot(bidPriceVect(bidIdxVect),bidFreqVect(bidIdxVect), 'rx', ofrPriceVect(ofrIdxVect),ofrFreqVect(ofrIdxVect),'bx');
+    title('Bid volume against bid price');
+    legend('bid','ask');
+    xlabel('Price');
+    ylabel('Quantity');
+    fprintf(fid4,'%d, %.2f, %.2f, %.2f, %.2f, %.2f, \n',...
+        totalTime, m_total, v_total, y_total, k_total, mPrice);
+    
 end 
 
 
@@ -112,12 +175,7 @@ end
 % end
 
 
-
-%figure
-%plot(bid{1}(bidIdx),bid{2}(bidIdx), 'r.', ofr{1}(ofrIdx), ofr{2}(ofrIdx),'b.');
-%title('Bid volume against bid price');
-%legend('bid','ask');
-
+fclose(fid0);
 fclose(fid1);
 fclose(fid2);
 fclose(fid3);
