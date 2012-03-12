@@ -28,6 +28,15 @@ int main () {
    totalFile = fopen("AAPLtotalHist.csv", "w"); // Open file for write
    if (NULL == totalFile) printf("ERROR opening file \n");
 
+   FILE *priceFile;
+   priceFile = fopen("AAPLpriceHist.csv", "w"); // Open file for write
+   if (NULL == priceFile) printf("ERROR opening file \n");
+
+   //
+   // Get bid/ask data first
+   //
+
+
 
    // Allocate memory for labels
    char** label = new char* [10];
@@ -130,8 +139,82 @@ int main () {
 	idx++;
    }
 
+
+
+
+   // Allocate memory for labels
+   tLabel = new char* [9];
+   for (int i=0; i<9; ++i) {
+         tLabel[i] = new char [10];
+         memset(tLabel[i], NULL, 10*sizeof(char));
+   }
+
+   //
+   // Scan trade price file now
+   //
+   
+   float price;
+   int g127;
+   int corr;
+   char* cond;
+   int size;
+   // char ex
+   // int date
+   // char* time
+
+   float cumSum = 0;
+   int cumWeight = 0;
+   float avePrice;
+   fscanf(tradeFile, "%s %s %s %s %s %s  %s %s %s", tLabel[0], tLabel[1], tLabel[2], tLabel[3], tLabel[4], tLabel[5], tLabel[6], tLabel[7], tLabel[8]);
+
+   idx = 0;
+   while(!feof(tradeFile)) {
+
+         fscanf(tradeFile, "%s %d %s %f %d %d %s %c  %d", symbol, &date, time, &price, &g127, &corr, cond, &ex, &size);
+         //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
+
+
+	hr = atoi(&time[0]); // Runs from 00 hrs to 24hrs
+        min = atoi(&time[2]); // 
+	sec = atoi(&time[5]);
+        timeCurr = 10000*hr + 100*min + sec; // Current time 
+	timePrev;
+	if (idx == 0) {timePrev = 10000*hr + 100*min + sec;}
+
+	if (timeCurr == timePrev) {
+	   cumSum = cumSum + price*size;
+	   cumWeight = cumWeight + size;
+	}
+
+	if (timeCurr != timePrev || feof(quoteFile) ) { // timeCurr is incremented 
+
+	   avePrice = cumSum/cumWeight;
+           for (int i=0; i<1000000; ++i) {
+                 fprintf(priceFile, "Time: %d, Price: %.2f, \n", timePrev, avePrice);
+   	   }
+
+	   timePrev = timeCurr;
+
+	   // Reset all the bins
+	   cumSum = 0;
+	   cumWeight = 0;
+
+	   cumSum = cumSum + price*size;
+	   cumWeight = cumWeight + size;
+
+	}
+	idx++;
+   }
+
+
+
+
+
+
+   fclose(priceFile);
    fclose(totalFile);
    fclose(ofrFile);
    fclose(quoteFile);
+   fclose(tradeFile);
    fclose(bidFile);
 }

@@ -17,7 +17,6 @@ total = textscan(fid3, 'Time: %d, Price: %.2f, Count: %d,');
 
 fid4 = fopen('AAPLdata.csv','w');
 
-
 i = 1;
 iStart = 1;
 iTimeStep = 1;
@@ -57,13 +56,7 @@ while i < nTotal
     totalData(iTimeStep,3) = v_total;
     totalData(iTimeStep,4) = y_total;
     totalData(iTimeStep,5) = k_total;
-    
-    
-    
-    
-    
-    
-    
+        
     fprintf(fid4,'%d, %.2f, %.2f, %.2f, %.2f \n',...
         totalTime, m_total, v_total, y_total, k_total);
     
@@ -74,42 +67,43 @@ end
 
 
 
-% j = 1;
-% jStart = 1;
-% jTimeStep = 1;
-% ofrData = zeros(size(ofr{1}), 5); %
-% nOfr = size(ofr{1},1); % Ofr dim
-% while j < nOfr
-%     
-%     while ofr{1}(jStart)==ofr{1}(j)
-%        j = j + 1;
-%        if j > nOfr
-%            break;
-%        end
-%     end
-%     jEnd = j - 1; % 6
-% 
-%     % Ofr Data
-%     ofrPriceVect = ofr{2}(jStart:jEnd);
-%     ofrFreqVect = ofr{3}(jStart:jEnd);
-%     ofrVect = rude(double(ofrFreqVect), ofrPriceVect); % Run length coding
-%     
-%     ofrTime = ofr{1}(jStart);
-%     m_ofr = mean(ofrVect);
-%     v_ofr = var(ofrVect);
-%     k_ofr = kurtosis(ofrVect); % Centered
-%     y_ofr = skewness(ofrVect);
-% 
-%     ofrData(jTimeStep,1) = ofrTime;
-%     ofrData(jTimeStep,2) = m_ofr;
-%     ofrData(jTimeStep,3) = v_ofr;
-%     ofrData(jTimeStep,4) = k_ofr;
-%     ofrData(jTimeStep,5) = y_ofr;    
-%     
-%     jStart = jEnd + 1;
-%     jTimeStep = jTimeStep + 1;
-%     
-% end 
+j = 1;
+jStart = 1;
+jTimeStep = 1;
+ofrData = zeros(size(ofr{1}), 5); %
+nOfr = size(ofr{1},1); % Ofr dim
+while j < nOfr
+    
+    while ofr{1}(jStart)==ofr{1}(j)
+       j = j + 1;
+       if j > nOfr
+           break;
+       end
+    end
+    jEnd = j - 1; % 6
+
+    % Ofr Data
+    ofrPriceVect = ofr{2}(jStart:jEnd);
+    ofrFreqVect = ofr{3}(jStart:jEnd);
+    ofrVect = rude(double(ofrFreqVect), ofrPriceVect); % Run length coding
+    
+    ofrTime = ofr{1}(jStart);
+    m_ofr = mean(ofrVect);
+    v_ofr = var(ofrVect);
+    k_ofr = kurtosis(ofrVect); % Centered
+    y_ofr = skewness(ofrVect);
+
+    ofrData(jTimeStep,1) = ofrTime;
+    ofrData(jTimeStep,2) = m_ofr;
+    ofrData(jTimeStep,3) = v_ofr;
+    ofrData(jTimeStep,4) = k_ofr;
+    ofrData(jTimeStep,5) = y_ofr;    
+    
+    jStart = jEnd + 1;
+    jTimeStep = jTimeStep + 1;
+    
+end 
+
 
 % for i = 1:size(ofr{1},1)
 %    if(bidData(i,1) ~= ofrData(i,1))
@@ -118,17 +112,6 @@ end
 % end
 
 
-% bidIdx : Index of higest freq element
-% [maxBidFreq, bidIdx] = max(bid{2}); % Find max freq
-% [maxOfrFreq, ofrIdx] = max(ofr{2});
-
-% lBndBid = 0.95*bid{1}(bidIdx);
-% uBndBid = 1.05*bid{1}(bidIdx);
-% lBndOfr = 0.95*ofr{1}(ofrIdx);
-% uBndOfr = 1.05*ofr{1}(ofrIdx);
-
-% bidIdx = find(bid{1}>lBndBid & bid{1}<uBndBid);
-% ofrIdx = find(bid{1}>lBndOfr & bid{1}<uBndOfr);
 
 %figure
 %plot(bid{1}(bidIdx),bid{2}(bidIdx), 'r.', ofr{1}(ofrIdx), ofr{2}(ofrIdx),'b.');

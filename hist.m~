@@ -17,7 +17,6 @@ total = textscan(fid3, 'Time: %d, Price: %.2f, Count: %d,');
 
 fid4 = fopen('AAPLdata.csv','w');
 
-
 i = 1;
 iStart = 1;
 iTimeStep = 1;
@@ -36,7 +35,15 @@ while i < nTotal
     % Bid Data
     totalPriceVect = total{2}(iStart:iEnd);
     totalFreqVect = total{3}(iStart:iEnd);
-    totalVect = rude(double(totalFreqVect), totalPriceVect); % Run length coding
+    
+    % Find index of higest freq element
+    [maxFreq, fIdx] = max(totalFreqVect); % Find max freq
+    lBnd = 0.95*totalPriceVect(fIdx);
+    uBnd = 1.05*totalPriceVect(fIdx);
+    idxVect = find(totalPriceVect>lBnd & totalPriceVect<uBnd);
+    
+    % Find the truncated vector
+    totalVect = rude(double(totalFreqVect(idxVect)), totalPriceVect(idxVect)); % Run length coding
     
     totalTime = total{1}(iStart);
     m_total = mean(totalVect);
@@ -50,16 +57,9 @@ while i < nTotal
     totalData(iTimeStep,4) = y_total;
     totalData(iTimeStep,5) = k_total;
     
-    % Find index of higest freq element
-    [maxFreq, fIdx] = max(totalFreqVect); % Find max freq
-
-    lBndBid = 0.95*total{1}(fIdx);
-    uBndBid = 1.05*bid{1}(fIdx);
-
-    bidIdx = find(bid{1}>lBndBid & bid{1}<uBndBid);
-    ofrIdx = find(bid{1}>lBndOfr & bid{1}<uBndOfr);
     
     
+      
     fprintf(fid4,'%d, %.2f, %.2f, %.2f, %.2f \n',...
         totalTime, m_total, v_total, y_total, k_total);
     
