@@ -55,6 +55,8 @@ int main () {
    int mode;
    char ex;
    unsigned int idx = 0;
+
+/*
   
    int* bidCount = new int [1000000];
    if (NULL == bidCount) {
@@ -144,7 +146,7 @@ int main () {
 	}
 	idx++;
    }
-
+*/
 
    // =====================================================
    // Scan Trade Price Data
