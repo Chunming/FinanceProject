@@ -56,7 +56,7 @@ int main () {
    char ex;
    unsigned int idx = 0;
 
-/*
+
   
    int* bidCount = new int [1000000];
    if (NULL == bidCount) {
@@ -83,7 +83,7 @@ int main () {
 
    fscanf(quoteFile, "%s %s %s %s %s %s  %s %s %s %s", label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9]);
 
-   while(!feof(quoteFile)) {
+   while (idx < 10000) { //while(!feof(quoteFile))
 
          fscanf(quoteFile, "%s %d %s %f %f %d %d %d %c", symbol, &date, time, &bid, &ofr, &bidSize, &ofrSize, &mode, &ex);
          //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
@@ -94,14 +94,12 @@ int main () {
            min = atoi(&time[2]); // 
 	   sec = atoi(&time[5]);
            timeCurr = 10000*hr + 100*min + sec; // Current time 
-	   timePrev;
 	}
 	else { // strlen == 8
 	   hr = atoi(&time[0]);
            min = atoi(&time[3]); 
 	   sec = atoi(&time[6]);
            timeCurr = 10000*hr + 100*min + sec;
-	   timePrev;
         }
 	if (idx == 0) {timePrev = 10000*hr + 100*min + sec;}
 
@@ -146,7 +144,7 @@ int main () {
 	}
 	idx++;
    }
-*/
+
 
    // =====================================================
    // Scan Trade Price Data
@@ -183,14 +181,12 @@ int main () {
            min = atoi(&time[2]); // 
 	   sec = atoi(&time[5]);
            timeCurr = 10000*hr + 100*min + sec; // Current time 
-	   timePrev;
 	}
 	else { // strlen == 8
 	   hr = atoi(&time[0]);
            min = atoi(&time[3]); 
 	   sec = atoi(&time[6]);
            timeCurr = 10000*hr + 100*min + sec;
-	   timePrev;
         }
 
 	// Initialize timePrev
