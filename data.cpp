@@ -9,11 +9,11 @@ using namespace std;
 
 int main () {
    FILE *quoteFile;
-   quoteFile = fopen("aaplquotestraining.txt", "r"); // Open file for read
+   quoteFile = fopen("ualquotestraining.txt", "r"); // Open file for read
    if (NULL == quoteFile) printf("ERROR opening file \n");
 
    FILE *tradeFile;
-   tradeFile = fopen("aapltradestraining.txt", "r"); // Open file for read
+   tradeFile = fopen("ualtradestraining.txt", "r"); // Open file for read
    if (NULL == tradeFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
@@ -83,7 +83,7 @@ int main () {
 
    fscanf(quoteFile, "%s %s %s %s %s %s  %s %s %s %s", label[0], label[1], label[2], label[3], label[4], label[5], label[6], label[7], label[8], label[9]);
 
-   while (idx < 100000) { //while(!feof(quoteFile))
+   while (idx < 500000) { //while(!feof(quoteFile))
 
          fscanf(quoteFile, "%s %d %s %f %f %d %d %d %c", symbol, &date, time, &bid, &ofr, &bidSize, &ofrSize, &mode, &ex);
          //printf("%s %d %s %f %f %d %d %d %c \n", symbol, date, time, bid, ofr, bidSize, ofrSize, mode, ex);
