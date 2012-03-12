@@ -9,11 +9,11 @@ using namespace std;
 
 int main () {
    FILE *quoteFile;
-   quoteFile = fopen("ualquotestraining.txt", "r"); // Open file for read
+   quoteFile = fopen("cvsquotestraining.txt", "r"); // Open file for read
    if (NULL == quoteFile) printf("ERROR opening file \n");
 
    FILE *tradeFile;
-   tradeFile = fopen("ualtradestraining.txt", "r"); // Open file for read
+   tradeFile = fopen("cvstradestraining.txt", "r"); // Open file for read
    if (NULL == tradeFile) printf("ERROR opening file \n");
 
    FILE *bidFile;
