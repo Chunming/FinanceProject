@@ -24,7 +24,7 @@ data: data.cpp
 	$(COMPILER) $(OPTIONS) data data.cpp 
 
 clean:
-	rm -f core *.o *.bak *stackdump *#
+	rm -f core *.exe *.o *.bak *stackdump *#
   
 #
 # The End !
