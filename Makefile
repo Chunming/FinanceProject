@@ -11,21 +11,21 @@
 # http://www.opensource.org/licenses/cpl1.0.php
 #
 
-COMPILER      = -c++
-OPTIONS       = -ansi -pedantic -Wall -o
-OPTIONS_LIBS  = -ansi -pedantic -Wall -c
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SOURCES=data.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=data
 
-all:  data
+all: $(SOURCES) $(EXECUTABLE)
 
-#GeneralHashFunctions.o: GeneralHashFunctions.cpp GeneralHashFunctions.h
-#	$(COMPILER) $(OPTIONS_LIBS) GeneralHashFunctions.cpp
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-data: data.cpp
-	$(COMPILER) $(OPTIONS) data data.cpp 
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f core *.exe *.o *.bak *stackdump *#
-  
-#
-# The End !
-#
+	rm -rf *o data
+

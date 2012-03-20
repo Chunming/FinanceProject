@@ -41,7 +41,7 @@ int main () {
    char** label = new char* [10];
    for (int i=0; i<10; ++i) {
          label[i] = new char [10];
-         memset(label[i], NULL, 10*sizeof(char));
+         memset(label[i], 0, 10*sizeof(char));
    }
 
    // Allocate memory for time
@@ -154,7 +154,7 @@ int main () {
    char** tLabel = new char* [9];
    for (int i=0; i<9; ++i) {
          tLabel[i] = new char [10];
-         memset(tLabel[i], NULL, 10*sizeof(char));
+         memset(tLabel[i], 0, 10*sizeof(char));
    }
    
    float price;
